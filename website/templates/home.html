@@ -1,21 +1,35 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
-    %}
-    <h1 align="center">Notes</h1>
-    <ul class="list-group list-group-flush" id="notes">
-      {% for note in user.notes %}
-      <li class="list-group-item">
-        {{ note.data }}
-        <button type="button" class="close" onClick="deleteNote({{ note.id }})">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </li>
-      {% endfor %}
-    </ul>
-    <form method="POST">
-      <textarea name="note" id="note" class="form-control"></textarea>
-      <br />
-      <div align="center">
-        <button type="submit" class="btn btn-primary">Add Note</button>
-      </div>
-    </form>
+{% extends "base.html" %} 
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+<h1 align="center">Stock Portfolio Suggestion</h1>
+
+<form action="/portfolio" method="POST">
+  <div align="center">
+
+      <label for="fname">Enter Amount:</label><br>
+      <input type="text" id="amount" name="amount"><br>
+
+      <input type="checkbox" id="ethical_inv" name="ethical" value="1">
+      <label for="ethical_inv"> Ethical Investing </label><br>
+
+      <input type="checkbox" id="growth_inv" name="growth" value="1">
+      <label for="growth_inv"> Growth Investing </label><br>
+
+      <input type="checkbox" id="index_inv" name="index" value="1">
+      <label for="index_inv"> Index Investing </label><br>
+
+      <input type="checkbox" id="quality_inv" name="quality" value="1">
+      <label for="quality_inv"> Quality Investing </label><br>
+
+      <input type="checkbox" id="value_inv" name="value" value="1">
+      <label for="value_inv"> Value Investing </label><br>
+      
+      
+
+    <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
+
+  </div>
+</form>
 {% endblock %}
