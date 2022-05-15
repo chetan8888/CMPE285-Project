@@ -3,13 +3,19 @@ from flask_login import login_required, current_user
 from .models import Note
 from . import db
 import json
+import requests
+
+API_KEY = "CHX24ZAMVDU3MJ6D"
+
+
+symbols = ['IBM']
 
 views = Blueprint('views', __name__)
 
 
 @views.route('/', methods=['GET', 'POST'])
 @login_required
-def home():
+def home():    
     return render_template("home.html", user=current_user)
 
 
@@ -25,8 +31,41 @@ def delete_note():
 
     return jsonify({})
 
+def get_indicators():
+    indicators = {}
+    indicators['ethical'] = 'RSI'
+    indicators['growth'] = 'SMA'
+    indicators['index'] = 'EMA'
+    indicators['quality'] = 'ADX'
+    indicators['value'] = 'CCI'
+
+    return indicators
+
 def get_stocks(strategies):
-    return {}
+    stocks = []
+    
+    indicators = get_indicators()
+    
+    for strategy in strategies:
+        for symbol in symbols:
+            indicator = indicators[strategy]
+            url = 'https://www.alphavantage.co/query?&&interval=monthly&time_period=10&series_type=open&apikey=' + API_KEY
+            url += '&symbol=' + symbol + '&function=' + indicator
+            
+            response = requests.get(url)
+            data = response.json()
+
+            value = 0
+            count = 0
+            key = 'Technical Analysis: ' + indicator
+            for date in data[key]:
+                value += float(data[key][date][indicator])
+                count += 1
+            
+            value = value/count
+            stocks.append([symbol, value])
+    
+    return stocks
 
 @views.route('/portfolio', methods=['POST','GET'])
 def portfolio():
@@ -41,6 +80,7 @@ def portfolio():
         print(amount ,strategies)
 
         stocks = get_stocks(strategies)
+        print(stocks)
 
 
     return render_template("portfolio.html", user=current_user, stocks=stocks)
