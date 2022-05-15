@@ -4,11 +4,13 @@ from .models import Note
 from . import db
 import json
 import requests
+from random import randrange
 
 API_KEY = "CHX24ZAMVDU3MJ6D"
+SYMBOLS_URL = "https://cloud.iexapis.com/beta/ref-data/symbols?token=sk_d240706be75b46eb8dc6dcb8cde34005"
+NUMBER_SYMBOLS = 30
 
 
-symbols = ['IBM']
 
 views = Blueprint('views', __name__)
 
@@ -43,6 +45,18 @@ def get_indicators():
 
 def get_stocks(strategies):
     stocks = []
+
+    symbols = []
+    symbols_response = requests.get(SYMBOLS_URL)
+    symbols_data = symbols_response.json()
+
+    indexes = []
+    for i in range(NUMBER_SYMBOLS):
+        indexes.append(randrange(0,len(symbols_data)))
+    
+    for index in indexes:
+        symbols.append(symbols_data[index]['symbol'])
+        
     
     indicators = get_indicators()
     
@@ -62,8 +76,9 @@ def get_stocks(strategies):
                 value += float(data[key][date][indicator])
                 count += 1
             
-            value = value/count
-            stocks.append([symbol, value])
+            if count != 0:
+                value = value/count
+                stocks.append([symbol, value])
     
     return stocks
 
