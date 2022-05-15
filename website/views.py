@@ -1,10 +1,11 @@
 from flask import Blueprint, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
-from .models import User
+from .models import portfolio, User
 from . import db
 import json
 import requests
 from random import randrange
+from . import models
 
 API_KEY = "CHX24ZAMVDU3MJ6D"
 SYMBOLS_URL = "https://cloud.iexapis.com/beta/ref-data/symbols?token=sk_d240706be75b46eb8dc6dcb8cde34005"
@@ -18,7 +19,7 @@ views = Blueprint('views', __name__)
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    print(current_user)
+    print(current_user.id)
     return render_template("home.html", user=current_user)
 
 def get_indicators():
@@ -89,9 +90,9 @@ def get_stocks(strategies):
     
     return stocks
 
-@views.route('/portfolio', methods=['POST','GET'])
+@views.route('/show_portfolio', methods=['POST','GET'])
 @login_required
-def portfolio():
+def show_portfolio():
     stocks = []
     if request.method == 'POST':
         strategies = []
@@ -109,13 +110,29 @@ def portfolio():
         # if len(stock_data) > 3:
         #     stock_data = stock_data[:3]
         
+        price = 0
         if len(stock_data) != 0:
             price = amount/len(stock_data)
         
         for s in stock_data:
             stocks.append([s, price])
         
+        print(stocks)
+        stock1 = ''
+        stock2 = ''
+        stock3 = ''
+
+        if len(stocks) > 0:
+            stock1 = stocks[0]
+        if len(stocks) > 1:
+            stock2 = stocks[1]
+        if len(stocks) > 2:
+            stock3 = stocks[2]
         
+        new_portfolio = portfolio(stock1=stock1, stock2=stock2, stock3=stock3, price=price, user_id=current_user.id)
+        db.session.add(new_portfolio)
+        db.session.commit()
+        flash("Portfolio added!", category='success')
         
 
         
