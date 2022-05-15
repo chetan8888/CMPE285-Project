@@ -19,8 +19,11 @@ views = Blueprint('views', __name__)
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    print(current_user.id)
-    return render_template("home.html", user=current_user)
+    portfolio_row = portfolio.query.filter_by(user_id = current_user.id).first()
+    if portfolio_row is None:
+        return render_template("home.html", user=current_user)
+    else:
+        return render_template("portfolio.html", user=current_user)
 
 def get_indicators():
     indicators = {}
@@ -38,13 +41,18 @@ def get_stocks(strategies):
     symbols = []
     symbols_response = requests.get(SYMBOLS_URL)
     symbols_data = symbols_response.json()
+    # print("symbols: ", symbols_data)
 
     indexes = []
     for i in range(NUMBER_SYMBOLS):
         indexes.append(randrange(0,len(symbols_data)))
     
+    print("indexes: ", indexes)
+    
     for index in indexes:
         symbols.append(symbols_data[index]['symbol'])
+    
+    print("symbols: ", symbols)
         
     
     indicators = get_indicators()
@@ -59,6 +67,11 @@ def get_stocks(strategies):
         
         indexes.append(i)
         indexes.append(randrange(11,20))
+    else:
+        while len(indexes) < 3:
+            index = randrange(0,len(symbols))
+            if index not in indexes:
+                indexes.append(index)
     
     for i in indexes:
         stocks.append(symbols[i])
@@ -93,49 +106,53 @@ def get_stocks(strategies):
 @views.route('/show_portfolio', methods=['POST','GET'])
 @login_required
 def show_portfolio():
-    stocks = []
     if request.method == 'POST':
-        strategies = []
-        amount = int(request.form.get('amount'))
-        for strategy in request.form:
-            if request.form.get(strategy) == '1':
-                strategies.append(strategy)
-        
-        print(amount ,strategies)
+        stocks = []
+        if request.method == 'POST':
+            strategies = []
+            amount = int(request.form.get('amount'))
+            for strategy in request.form:
+                if request.form.get(strategy) == '1':
+                    strategies.append(strategy)
+            
+            print(amount ,strategies)
 
-        stock_data = get_stocks(strategies)
-        
-        # stock_data = sorted(stock_data, key=lambda x:x[1])
+            stock_data = get_stocks(strategies)
+            print(stock_data)
+            
+            # stock_data = sorted(stock_data, key=lambda x:x[1])
 
-        # if len(stock_data) > 3:
-        #     stock_data = stock_data[:3]
-        
-        price = 0
-        if len(stock_data) != 0:
-            price = amount/len(stock_data)
-        
-        for s in stock_data:
-            stocks.append([s, price])
-        
-        print(stocks)
-        stock1 = ''
-        stock2 = ''
-        stock3 = ''
+            # if len(stock_data) > 3:
+            #     stock_data = stock_data[:3]
+            
+            price = 0
+            if len(stock_data) != 0:
+                price = amount/len(stock_data)
+            
+            for s in stock_data:
+                stocks.append([s, price])
+            
+            print(stocks)
+            stock1 = ''
+            stock2 = ''
+            stock3 = ''
 
-        if len(stocks) > 0:
-            stock1 = stocks[0]
-        if len(stocks) > 1:
-            stock2 = stocks[1]
-        if len(stocks) > 2:
-            stock3 = stocks[2]
-        
-        new_portfolio = portfolio(stock1=stock1, stock2=stock2, stock3=stock3, price=price, user_id=current_user.id)
-        db.session.add(new_portfolio)
-        db.session.commit()
-        flash("Portfolio added!", category='success')
-        
+            if len(stocks) > 0:
+                stock1 = stocks[0]
+            if len(stocks) > 1:
+                stock2 = stocks[1]
+            if len(stocks) > 2:
+                stock3 = stocks[2]
+            
+            new_portfolio = portfolio(stock1='stock1', stock2='stock2', stock3='stock3', price=price, user_id=current_user.id)
+            db.session.add(new_portfolio)
+            db.session.commit()
+            flash("Portfolio added!", category='success')
+            
 
-        
-        # Sample stocks
-        # [['GJP', 1666.6666666666667], ['EBET', 1666.6666666666667], ['ADAL', 1666.6666666666667]]
-    return render_template("portfolio.html", user=current_user) 
+            
+            # Sample stocks
+            # [['GJP', 1666.6666666666667], ['EBET', 1666.6666666666667], ['ADAL', 1666.6666666666667]]
+        return render_template("portfolio.html", user=current_user)
+    else:
+        return render_template("portfolio.html", user=current_user)
