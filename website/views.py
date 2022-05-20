@@ -6,6 +6,7 @@ import json
 import requests
 from random import randrange
 from . import models
+from portfolio import *
 
 API_KEY = "CHX24ZAMVDU3MJ6D"
 SYMBOLS_URL = "https://cloud.iexapis.com/beta/ref-data/symbols?token=sk_d240706be75b46eb8dc6dcb8cde34005"
@@ -149,8 +150,19 @@ def show_portfolio():
             db.session.commit()
             flash("Portfolio added!", category='success')
             
+            #Code for portfolio graph
 
-            
+            # tickers = []
+            # tickers.append(stock1)
+            # tickers.append(stock2)
+            # tickers.append(stock3)
+
+            #test function
+            # remove later
+            tickers = ['WFC', 'AAPL','MSFT']
+            amounts = [100, 100,20]
+            createPlot(tickers, amounts)
+
             # Sample stocks
             # [['GJP', 1666.6666666666667], ['EBET', 1666.6666666666667], ['ADAL', 1666.6666666666667]]
         return render_template("portfolio.html", user=current_user)
