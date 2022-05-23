@@ -1,14 +1,37 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 
-{% block title %} Portfolio {% endblock %} 
+{% block title %} Portfolio {% endblock %}
 
 {% block content %}
-Portfolio
-<img src="../output/indiv_trend.png" alt="no image" >
-<img src="../output/portfolio_graph.png" alt="no image">
-<img src="../output/portfolio_trend.png" alt="no image">
-
-
-<img src="../static/images/ethical.png" alt="no image">
-
+<img src="../static/images/indiv_trend.png" class="rounded float-center" style=" display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;" alt="...">
+<h1 style=" font-size: 20px; display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%; text-align: center;"> Trend of each stock in the past 5 days</h1>
+</div>
+<br>
+<div>
+    <img src="../static/images/portfolio_graph.png" class="rounded float-center" style=" display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;" alt="...">
+    <h1 style=" font-size: 20px; display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%; text-align: center;"> Trends of the portfolio in the past 5 days</h1>
+</div>
+<br>
+<div>
+    <img src="../static/images/portfolio_trend.png" class="rounded float-center" style=" display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;" alt="...">
+    <h1 style=" font-size: 20px; display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%; text-align: center;"> Porfolio metrics</h1>
+</div>
 {% endblock %}

@@ -282,3 +282,13 @@ def show_portfolio():
         # amounts = [100, 100,20]
         # createPlot(stock_data, investment_price)
         return render_template("portfolio.html", user=current_user)
+
+
+
+        # if len(stock_data)==0:
+        #             flash('Select atleast one strategy!', category='error')
+        #             return render_template("home.html", user=current_user)
+        #         elif len(stock_data)>2:
+        #             flash('Select maximum two strategies!', category='error')
+        #             return render_template("home.html", user=current_user)
+        #         else:
