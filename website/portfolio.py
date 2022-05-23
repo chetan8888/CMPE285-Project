@@ -68,7 +68,7 @@ def createPlot(tickers, investment_amount):
               horizontalalignment='center', verticalalignment='center')
       counter += 0.15
   plt.plot()
-  fig.savefig("website/output/portfolio_graph.png")
+  fig.savefig("static/output/portfolio_graph.png")
 
 
 #TEST CODE
