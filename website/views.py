@@ -65,7 +65,7 @@ def individual_trends(tickers):
                     top=0.9, 
                     wspace=0.4, 
                     hspace=0.4)
-    plt.savefig("website/output/indiv_trend.png")
+    plt.savefig("websi/static/output/indiv_trend.png")
     return multpl_stocks
 
 def createPlot(tickers, amounts):
@@ -110,7 +110,7 @@ def createPlot(tickers, amounts):
               horizontalalignment='center', verticalalignment='center')
       counter += 0.15
   # plt.plot()
-  plt.savefig("website/output/portfolio_graph.png")
+  plt.savefig("website/static/output/portfolio_graph.png")
 
 
 def portfolio_trend(multpl_stocks):
@@ -121,7 +121,7 @@ def portfolio_trend(multpl_stocks):
   fig = plt.figure()
   (multpl_stock_daily_returns + 1).cumprod().plot()
   # plt.show()
-  plt.savefig("website/output/portfolio_trend.png")
+  plt.savefig("website/static/output/portfolio_trend.png")
 
 def get_stocks(strategies):
     stocks = []
