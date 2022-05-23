@@ -54,11 +54,11 @@ def individual_trends(tickers):
     ax2 = fig.add_subplot(322)
     ax3 = fig.add_subplot(323)
     ax1.plot(multpl_stocks['Adj Close'][tickers[0]])
-    ax1.set_title("Amazon").set_fontsize(20)
+    ax1.set_title(tickers[0]).set_fontsize(20)
     ax2.plot(multpl_stocks['Adj Close'][tickers[1]])
-    ax2.set_title("Apple").set_fontsize(20)
+    ax2.set_title(tickers[1]).set_fontsize(20)
     ax3.plot(multpl_stocks['Adj Close'][tickers[2]])
-    ax3.set_title("Facebook").set_fontsize(20)
+    ax3.set_title(tickers[2]).set_fontsize(20)
     plt.subplots_adjust(left=0.1,
                     bottom=0.1, 
                     right=0.9, 
