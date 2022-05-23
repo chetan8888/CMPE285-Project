@@ -65,7 +65,7 @@ def individual_trends(tickers):
                     top=0.9, 
                     wspace=0.4, 
                     hspace=0.4)
-    plt.savefig("websi/static/output/indiv_trend.png")
+    plt.savefig("website/output/indiv_trend.png")
     return multpl_stocks
 
 def createPlot(tickers, amounts):
@@ -110,7 +110,7 @@ def createPlot(tickers, amounts):
               horizontalalignment='center', verticalalignment='center')
       counter += 0.15
   # plt.plot()
-  plt.savefig("website/static/output/portfolio_graph.png")
+  plt.savefig("website/output/portfolio_graph.png")
 
 
 def portfolio_trend(multpl_stocks):
@@ -121,7 +121,7 @@ def portfolio_trend(multpl_stocks):
   fig = plt.figure()
   (multpl_stock_daily_returns + 1).cumprod().plot()
   # plt.show()
-  plt.savefig("website/static/output/portfolio_trend.png")
+  plt.savefig("website/output/portfolio_trend.png")
 
 def get_stocks(strategies):
     stocks = []
@@ -210,67 +210,71 @@ def show_portfolio():
         if request.method == 'POST':
             strategies = []
             amount = int(request.form.get('amount'))
-            for strategy in request.form:
-                if request.form.get(strategy) == '1':
-                    strategies.append(strategy)
-            
-            print(amount ,strategies)
+            if amount < 5000:
+                flash('Amount must be atleast $5000.', category='error')
+                return render_template("home.html", user=current_user)
+            else:
+                for strategy in request.form:
+                    if request.form.get(strategy) == '1':
+                        strategies.append(strategy)
+                
+                print(amount ,strategies)
 
-            stock_data = get_stocks(strategies)
-            print(stock_data)
-            
-            # stock_data = sorted(stock_data, key=lambda x:x[1])
+                stock_data = get_stocks(strategies)
+                print(stock_data)
+                
+                # stock_data = sorted(stock_data, key=lambda x:x[1])
 
-            # if len(stock_data) > 3:
-            #     stock_data = stock_data[:3]
-            
-            price = 0
-            investment_price = []
-            if len(stock_data) != 0:
-                price = amount/len(stock_data)
-                # investment_price.append(price)
-                # investment_price.append(price)
-                # investment_price.append(price)
+                # if len(stock_data) > 3:
+                #     stock_data = stock_data[:3]
+                
+                price = 0
+                investment_price = []
+                if len(stock_data) != 0:
+                    price = amount/len(stock_data)
+                    # investment_price.append(price)
+                    # investment_price.append(price)
+                    # investment_price.append(price)
                 
 
-            for s in stock_data:
-                print(s)
-                stocks.append([s, price])
-                investment_price.append(price)
-                # pf.createPlot(stock_data, [100, 100,20])
+                for s in stock_data:
+                    print(s)
+                    stocks.append([s, price])
+                    investment_price.append(price)
+                    # pf.createPlot(stock_data, [100, 100,20])
 
-            print("Investment Price")
-            print(investment_price)
+                print("Investment Price")
+                print(investment_price)
 
-            print("stocks")
-            print(stocks)
-            print(stocks[0])
-            
-            multpl_stocks = individual_trends(stock_data)
-            print("multpl_stocks", multpl_stocks)
-            portfolio_trend(multpl_stocks)
-            amounts = [100, 100,20]
-            createPlot(stock_data, investment_price)
+                print("stocks")
+                print(stocks)
+                print(stocks[0])
+                
+                multpl_stocks = individual_trends(stock_data)
+                print("multpl_stocks", multpl_stocks)
+                portfolio_trend(multpl_stocks)
+                amounts = [100, 100,20]
+                createPlot(stock_data, investment_price)
 
-            print("Here")
-            stock1 = ''
-            stock2 = ''
-            stock3 = ''
+                print("Here")
+                stock1 = ''
+                stock2 = ''
+                stock3 = ''
 
-            if len(stocks) > 0:
-                stock1 = stocks[0]
-            if len(stocks) > 1:
-                stock2 = stocks[1]
-            if len(stocks) > 2:
-                stock3 = stocks[2]
-            
-            new_portfolio = portfolio(stock1='stock1', stock2='stock2', stock3='stock3', price=price, user_id=current_user.id)
-            db.session.add(new_portfolio)
-            db.session.commit()
-            flash("Portfolio added!", category='success')
-            # Sample stocks
-            # [['GJP', 1666.6666666666667], ['EBET', 1666.6666666666667], ['ADAL', 1666.6666666666667]]
-        return render_template("portfolio.html", user=current_user)
+                if len(stocks) > 0:
+                    stock1 = stocks[0]
+                if len(stocks) > 1:
+                    stock2 = stocks[1]
+                if len(stocks) > 2:
+                    stock3 = stocks[2]
+                
+                new_portfolio = portfolio(stock1='stock1', stock2='stock2', stock3='stock3', price=price, user_id=current_user.id)
+                db.session.add(new_portfolio)
+                db.session.commit()
+                flash("Portfolio added!", category='success')
+                # Sample stocks
+                # [['GJP', 1666.6666666666667], ['EBET', 1666.6666666666667], ['ADAL', 1666.6666666666667]]
+                return render_template("portfolio.html", user=current_user)
     else:
         # multpl_stocks = individual_trends(stock_data)
         # print("multpl_stocks", multpl_stocks)
