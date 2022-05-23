@@ -1,33 +1,29 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 
 {% block title %} Home {% endblock %}
 
 {% block content %}
 
-<h1 align="center">Stock Portfolio Suggestion</h1>
-
 <form action="/show_portfolio" method="POST">
   <div align="center">
 
-      <label for="fname">Enter Amount:</label><br>
-      <input type="text" id="amount" name="amount"><br>
+    <label for="fname" style="padding-top: 50px">Enter the Amount to Invest:</label><br>
+    <input type="text" id="amount" name="amount" placeholder="$"><br>
 
-      <input type="checkbox" id="ethical_inv" name="ethical" value="1">
-      <label for="ethical_inv"> Ethical Investing </label><br>
+    <input type="checkbox" id="ethical_inv" name="ethical" value="1">
+    <label for="ethical_inv"> Ethical Investing </label><br>
 
-      <input type="checkbox" id="growth_inv" name="growth" value="1">
-      <label for="growth_inv"> Growth Investing </label><br>
+    <input type="checkbox" id="growth_inv" name="growth" value="1">
+    <label for="growth_inv"> Growth Investing </label><br>
 
-      <input type="checkbox" id="index_inv" name="index" value="1">
-      <label for="index_inv"> Index Investing </label><br>
+    <input type="checkbox" id="index_inv" name="index" value="1">
+    <label for="index_inv"> Index Investing </label><br>
 
-      <input type="checkbox" id="quality_inv" name="quality" value="1">
-      <label for="quality_inv"> Quality Investing </label><br>
+    <input type="checkbox" id="quality_inv" name="quality" value="1">
+    <label for="quality_inv"> Quality Investing </label><br>
 
-      <input type="checkbox" id="value_inv" name="value" value="1">
-      <label for="value_inv"> Value Investing </label><br>
-      
-      
+    <input type="checkbox" id="value_inv" name="value" value="1">
+    <label for="value_inv"> Value Investing </label><br>
 
     <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
 
